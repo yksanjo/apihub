@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Guessing Game</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 50px auto; padding: 20px; }
+        .game { border: 2px solid #333; padding: 20px; border-radius: 10px; }
+        input, button { padding: 10px; margin: 5px; font-size: 16px; }
+        .message { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .correct { background: #d4edda; color: #155724; }
+        .wrong { background: #f8d7da; color: #721c24; }
+        .hint { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="game">
+        <h1>Guess the Number (1-100)</h1>
+        <p>I'm thinking of a number between 1 and 100. Can you guess it?</p>
+        <input type="number" id="guess" min="1" max="100" placeholder="Enter guess">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <button onclick="newGame()">New Game</button>
+        <div id="message" class="message">Enter your first guess!</div>
+        <div id="attempts">Attempts: 0</div>
+        <div id="guesses">Previous guesses: </div>
+    </div>
+
+    <script>
+        let target = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+        let previousGuesses = [];
+
+        function checkGuess() {
+            const guessInput = document.getElementById('guess');
+            const guess = parseInt(guessInput.value);
+            const message = document.getElementById('message');
+            
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                message.textContent = 'Please enter a number between 1 and 100!';
+                message.className = 'message wrong';
+                return;
+            }
+
+            attempts++;
+            previousGuesses.push(guess);
+            
+            document.getElementById('attempts').textContent = 'Attempts: ' + attempts;
+            document.getElementById('guesses').textContent = 'Previous guesses: ' + previousGuesses.join(', ');
+
+            if (guess === target) {
+                message.textContent = `🎉 Correct! The number was ${target}. You took ${attempts} attempts.`;
+                message.className = 'message correct';
+            } else if (guess < target) {
+                message.textContent = '📈 Too low! Try a higher number.';
+                message.className = 'message hint';
+            } else {
+                message.textContent = '📉 Too high! Try a lower number.';
+                message.className = 'message hint';
+            }
+            
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        function newGame() {
+            target = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            previousGuesses = [];
+            document.getElementById('message').textContent = 'New game! Guess a number between 1 and 100.';
+            document.getElementById('message').className = 'message';
+            document.getElementById('attempts').textContent = 'Attempts: 0';
+            document.getElementById('guesses').textContent = 'Previous guesses: ';
+            document.getElementById('guess').focus();
+        }
+
+        // Allow pressing Enter to submit
+        document.getElementById('guess').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkGuess();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Bot Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        .step { margin: 20px 0; padding: 15px; border-left: 4px solid #007bff; background: #f8f9fa; }
+        code { background: #eee; padding: 2px 5px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Telegram Bot Status Test</h1>
+    
+    <div class="step">
+        <h2>Step 1: Bot Information</h2>
+        <p><strong>Token:</strong> <code>8208452855:AAGdgNAUCJ6Lgq_un5Lh86iTW8XTbHc12Lg</code></p>
+        <p><strong>Name:</strong> お守り (Omamori)</p>
+        <p><strong>Username:</strong> @Omamoribotbot</p>
+        <p><strong>ID:</strong> 8208452855</p>
+        <p id="status1">Checking... <span id="status1-result"></span></p>
+    </div>
+    
+    <div class="step">
+        <h2>Step 2: Your Action Required</h2>
+        <p><strong>DO THIS NOW:</strong></p>
+        <ol>
+            <li>Open Telegram on your phone/desktop</li>
+            <li>Tap the search icon (🔍)</li>
+            <li>Type: <code>@Omamoribotbot</code></li>
+            <li>Click on the bot named "お守り"</li>
+            <li>Click "Start" or type <code>/start</code></li>
+            <li>Type "Test" and send</li>
+        </ol>
+        <p>Then click the button below:</p>
+        <button onclick="checkMessages()">✅ I sent a message - Check Now</button>
+        <p id="status2"></p>
+    </div>
+    
+    <div class="step">
+        <h2>Step 3: Direct Link</h2>
+        <p>If you can't find the bot in search:</p>
+        <p><a href="https://t.me/Omamoribotbot" target="_blank" style="font-size: 18px; padding: 10px; background: #0088cc; color: white; text-decoration: none; border-radius: 5px;">
+            📲 Click here to open @Omamoribotbot
+        </a></p>
+    </div>
+    
+    <div class="step">
+        <h2>Results</h2>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Check bot status
+        fetch('https://api.telegram.org/bot8208452855:AAGdgNAUCJ6Lgq_un5Lh86iTW8XTbHc12Lg/getMe')
+            .then(r => r.json())
+            .then(data => {
+                const el = document.getElementById('status1-result');
+                if (data.ok) {
+                    el.innerHTML = '<span class="success">✅ Bot exists and is valid</span>';
+                } else {
+                    el.innerHTML = '<span class="error">❌ Bot token invalid</span>';
+                }
+            });
+        
+        function checkMessages() {
+            document.getElementById('status2').innerHTML = 'Checking for your message...';
+            
+            fetch('https://api.telegram.org/bot8208452855:AAGdgNAUCJ6Lgq_un5Lh86iTW8XTbHc12Lg/getUpdates')
+                .then(r => r.json())
+                .then(data => {
+                    const results = document.getElementById('results');
+                    
+                    if (data.ok && data.result && data.result.length > 0) {
+                        const lastMsg = data.result[data.result.length - 1];
+                        const msg = lastMsg.message || lastMsg.edited_message;
+                        
+                        if (msg) {
+                            const user = msg.from;
+                            const text = msg.text;
+                            
+                            results.innerHTML = `
+                                <div class="success">
+                                    <h3>🎉 SUCCESS! Bot is WORKING!</h3>
+                                    <p>Your message was received:</p>
+                                    <p><strong>From:</strong> ${user.first_name} (${user.id})</p>
+                                    <p><strong>Message:</strong> "${text}"</p>
+                                    <p>The bot IS receiving messages. If it's not responding, 
+                                    the issue is with OpenClaw configuration, not the bot itself.</p>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        results.innerHTML = `
+                            <div class="error">
+                                <h3>❌ NO MESSAGES FOUND</h3>
+                                <p>You have NOT messaged @Omamoribotbot yet.</p>
+                                <p>Please:</p>
+                                <ol>
+                                    <li>Open Telegram</li>
+                                    <li>Search for <code>@Omamoribotbot</code></li>
+                                    <li>Click "Start"</li>
+                                    <li>Send "Test"</li>
+                                </ol>
+                                <p>Or use the direct link above.</p>
+                            </div>
+                        `;
+                    }
+                    
+                    document.getElementById('status2').innerHTML = '';
+                });
+        }
+    </script>
+</body>
+</html>

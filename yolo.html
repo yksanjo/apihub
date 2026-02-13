@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🎮 YOLO GAME 🎮</title>
+    <style>
+        body {
+            font-family: Arial;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #000;
+            color: #0f0;
+            text-align: center;
+        }
+        .game {
+            border: 3px solid #0f0;
+            padding: 30px;
+            border-radius: 10px;
+            background: #111;
+            box-shadow: 0 0 20px #0f0;
+        }
+        h1 {
+            color: #ff0;
+            text-shadow: 0 0 10px #ff0;
+        }
+        .yolo {
+            background: #f00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        input, button {
+            padding: 12px;
+            margin: 10px;
+            font-size: 16px;
+            width: 80%;
+            border: 2px solid #0f0;
+            background: #000;
+            color: #0f0;
+        }
+        button {
+            background: #f00;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #ff0;
+            color: #000;
+        }
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border: 1px solid #0f0;
+            border-radius: 5px;
+            min-height: 60px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #0f0;
+            border-radius: 5px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            color: #ff0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game">
+        <h1>🎮 YOLO NUMBER GAME 🎮</h1>
+        <div class="yolo">YOLO MODE: ACTIVE</div>
+        
+        <div class="message" id="message">
+            Guess the number (1-100)<br>
+            You Only Live Once - make it count!
+        </div>
+        
+        <input type="number" id="guess" min="1" max="100" placeholder="Enter guess">
+        <br>
+        <button onclick="yoloGuess()">🔥 YOLO GUESS</button>
+        <button onclick="newGame()">🔄 NEW GAME</button>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="score">0</div>
+                <div>SCORE</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="attempts">0</div>
+                <div>ATTEMPTS</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="best">0</div>
+                <div>BEST</div>
+            </div>
+        </div>
+        
+        <div id="history" style="border:1px solid #0f0; padding:15px; border-radius:5px; margin-top:20px;">
+            <strong>Your guesses:</strong>
+            <div id="guesses"></div>
+        </div>
+    </div>
+
+    <script>
+        let target = Math.floor(Math.random() * 100) + 1;
+        let attempts = 0;
+        let score = 0;
+        let best = localStorage.getItem('yoloBest') || 0;
+        let gameActive = true;
+        
+        document.getElementById('best').textContent = best;
+        
+        function yoloGuess() {
+            if (!gameActive) return;
+            
+            const guess = parseInt(document.getElementById('guess').value);
+            const message = document.getElementById('message');
+            
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                message.innerHTML = '⚠️ Enter 1-100!';
+                message.style.color = '#f00';
+                return;
+            }
+            
+            attempts++;
+            document.getElementById('attempts').textContent = attempts;
+            
+            // Add to history
+            const guessDiv = document.createElement('div');
+            guessDiv.style.padding = '5px';
+            guessDiv.style.margin = '3px 0';
+            guessDiv.style.background = '#222';
+            guessDiv.style.borderRadius = '3px';
+            
+            if (guess === target) {
+                // WIN!
+                const points = Math.max(1, Math.floor(100 / attempts));
+                score += points;
+                document.getElementById('score').textContent = score;
+                
+                message.innerHTML = `🎉 YOLO WIN! Number was ${target}. +${points} points!`;
+                message.style.color = '#0f0';
+                
+                guessDiv.innerHTML = `🎯 <strong>${guess}</strong> - HIT! (+${points})`;
+                guessDiv.style.color = '#0f0';
+                
+                gameActive = false;
+                document.getElementById('guess').disabled = true;
+                
+                // Update best
+                if (score > best) {
+                    best = score;
+                    localStorage.setItem('yoloBest', best);
+                    document.getElementById('best').textContent = best;
+                }
+                
+            } else if (guess < target) {
+                message.innerHTML = `📈 Too low!`;
+                message.style.color = '#ff0';
+                guessDiv.innerHTML = `📈 <strong>${guess}</strong> - LOW`;
+                guessDiv.style.color = '#ff0';
+            } else {
+                message.innerHTML = `📉 Too high!`;
+                message.style.color = '#ff0';
+                guessDiv.innerHTML = `📉 <strong>${guess}</strong> - HIGH`;
+                guessDiv.style.color = '#ff0';
+            }
+            
+            document.getElementById('guesses').appendChild(guessDiv);
+            document.getElementById('guess').value = '';
+            document.getElementById('guess').focus();
+        }
+        
+        function newGame() {
+            target = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameActive = true;
+            
+            document.getElementById('message').innerHTML = 'New YOLO game! Guess 1-100';
+            document.getElementById('message').style.color = '#0f0';
+            document.getElementById('attempts').textContent = '0';
+            document.getElementById('guesses').innerHTML = '';
+            
+            const guessInput = document.getElementById('guess');
+            guessInput.disabled = false;
+            guessInput.focus();
+        }
+        
+        // Enter key support
+        document.getElementById('guess').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') yoloGuess();
+        });
+        
+        // Focus on load
+        document.getElementById('guess').focus();
+    </script>
+</body>
+</html>
