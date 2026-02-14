@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Users model
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  name        String?
+  avatarUrl   String?   @map("avatar_url")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  reviews        Review[]
+  requestHistory RequestHistory[]
+
+  @@map("users")
+}
+
+// APIs model - the main collection
+model Api {
+  id               String    @id @default(uuid())
+  name             String
+  description      String?   @db.Text
+  baseUrl          String?   @map("base_url") @db.VarChar(500)
+  category         String?   @map("category") @db.VarChar(100)
+  authType         String?   @map("auth_type") @db.VarChar(50)
+  rateLimit        String?   @map("rate_limit") @db.VarChar(100)
+  documentationUrl String?   @map("documentation_url") @db.VarChar(500)
+  cors             String?   @db.VarChar(50)
+  https            Boolean?  @default(true)
+  openapiSpec      Json?     @map("openapi_spec")
+  featured         Boolean?  @default(false)
+  imageUrl         String?   @map("image_url")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  reviews        Review[]
+  requestHistory RequestHistory[]
+
+  @@index([category])
+  @@index([name])
+  @@map("apis")
+}
+
+// Reviews model
+model Review {
+  id           String    @id @default(uuid())
+  apiId        String    @map("api_id")
+  userId       String    @map("user_id")
+  rating       Int
+  content      String?   @db.Text
+  helpfulCount Int       @default(0) @map("helpful_count")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  api  Api  @relation(fields: [apiId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([apiId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+// Request History model
+model RequestHistory {
+  id              String    @id @default(uuid())
+  userId          String?   @map("user_id")
+  apiId           String?   @map("api_id")
+  method          String    @db.VarChar(10)
+  url             String    @db.Text
+  headers         Json?     @map("headers")
+  body            String?   @db.Text
+  responseStatus  Int?      @map("response_status")
+  responseBody    String?   @map("response_body") @db.Text
+  responseTime    Int?      @map("response_time")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  api  Api?  @relation(fields: [apiId], references: [id], onDelete: SetNull)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([apiId])
+  @@map("request_history")
+}

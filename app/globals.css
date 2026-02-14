@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-tertiary: #1a1a24;
+  --bg-hover: #22222e;
+
+  --accent-primary: #00d4aa;
+  --accent-secondary: #7c3aed;
+  --accent-warning: #f59e0b;
+  --accent-error: #ef4444;
+  --accent-success: #10b981;
+
+  --text-primary: #f4f4f5;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+
+  --border-default: #27272a;
+  --border-hover: #3f3f46;
+
+  --gradient-hero: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+  --gradient-card: linear-gradient(180deg, rgba(0,212,170,0.08) 0%, transparent 100%);
+  --gradient-accent: linear-gradient(90deg, #00d4aa 0%, #7c3aed 100%);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'IBM Plex Sans', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.2;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Custom Utility Classes */
+@layer utilities {
+  .text-gradient {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .border-default {
+    border-color: var(--border-default);
+  }
+
+  .border-hover {
+    border-color: var(--border-hover);
+  }
+
+  .glass {
+    background: rgba(18, 18, 26, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glow {
+    box-shadow: 0 0 40px rgba(0, 212, 170, 0.15);
+  }
+
+  .card-shadow {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border-default);
+  }
+
+  .transition-default {
+    transition: all 200ms ease-out;
+  }
+
+  .transition-panel {
+    transition: all 300ms ease-out;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-tertiary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Focus States */
+*:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 212, 170, 0.3);
+  color: var(--text-primary);
+}
+
+/* Status Badge Colors */
+.status-success {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: var(--accent-success);
+}
+
+.status-warning {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--accent-warning);
+}
+
+.status-error {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--accent-error);
+}
+
+.status-info {
+  background-color: rgba(124, 58, 237, 0.15);
+  color: var(--accent-secondary);
+}
+
+/* Method Badge Colors */
+.method-get {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.method-post {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.method-put {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.method-delete {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.method-patch {
+  background-color: rgba(124, 58, 237, 0.15);
+  color: #7c3aed;
+}
