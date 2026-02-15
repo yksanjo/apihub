@@ -1,0 +1,23 @@
+{
+  "name": "docuextract-gateway",
+  "version": "1.0.0",
+  "description": "Unified API Gateway for Document Extraction Services",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@aws-sdk/client-textract": "^3.500.0",
+    "@azure/ai-form-recognizer": "^5.0.0",
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
