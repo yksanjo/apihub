@@ -1,28 +1,15 @@
-# PromptLab - Specification Document
+# EvolutionaryEngine - Specification Document
 
 ## 1. Project Overview
 
-**Project Name:** PromptLab  
+**Project Name:** EvolutionaryEngine  
 **Type:** SaaS Web Application  
-**Core Functionality:** A specialized platform for prompt engineering, version control, and collaborative prompt optimization. Features prompt templates, diff viewing, rollback, and team collaboration.  
-**Target Users:** Prompt engineers, AI developers, LLM application builders, and teams working on prompt optimization.
+**Core Functionality:** A specialized platform for running evolutionary optimization experiments. Features experiment tracking, real-time progress visualization, parameter tuning, and results analytics.  
+**Target Users:** AI/ML researchers, prompt engineers, and data scientists working on evolutionary algorithms.
 
 ---
 
 ## 2. UI/UX Specification
-
-### Layout Structure
-
-**Page Sections:**
-- **Navigation Bar:** Fixed top, 64px height, logo + main nav + user menu
-- **Sidebar:** Collapsible left sidebar, 280px width
-- **Main Content Area:** Fluid width
-- **Footer:** Minimal, 48px
-
-**Responsive Breakpoints:**
-- Mobile: < 768px
-- Tablet: 768px - 1024px
-- Desktop: > 1024px
 
 ### Visual Design
 
@@ -30,29 +17,14 @@
 - Background Primary: `#0D0D12`
 - Background Secondary: `#16161D`
 - Background Tertiary: `#1E1E28`
-- Accent Primary: `#00D9FF` (electric cyan)
-- Accent Secondary: `#FF6B35` (vibrant coral)
-- Accent Tertiary: `#A855F7` (purple glow)
+- Accent Primary: `#00D9FF` (cyan)
+- Accent Secondary: `#FF6B35` (coral)
 - Success: `#10B981`
-- Warning: `#F59E0B`
-- Error: `#EF4444`
 - Text Primary: `#F8FAFC`
 - Text Secondary: `#94A3B8`
-- Text Muted: `#64748B`
-- Border: `#2D2D3A`
 
 **Typography:**
-- Font Family Primary: `'JetBrains Mono', monospace`
-- Font Family Secondary: `'Outfit', sans-serif`
-- Font Family Body: `'DM Sans', sans-serif`
-
-### Components
-
-- Prompt cards with version badges
-- Diff viewer with syntax highlighting
-- Version timeline
-- Tag filters
-- Code editor with syntax highlighting
+- Font Family: JetBrains Mono, Outfit, DM Sans
 
 ---
 
@@ -61,39 +33,26 @@
 ### Core Features
 
 **1. Dashboard**
-- Prompt overview metrics
-- Recent prompts
-- Team activity
+- Active experiments overview
+- Running experiments with progress
+- Quick stats
 
-**2. Prompt Management**
-- Create/edit/delete prompts
-- Rich text editor
-- Tags and categories
-- Search and filter
+**2. Experiment Management**
+- Create experiments with parameters
+- Population size, generations, mutation rate
+- Start/pause/stop controls
+- Real-time progress tracking
+- Results visualization
 
-**3. Version Control**
-- Full version history
-- Diff view between versions
-- Rollback capability
-- Version comparison
-
-**4. Templates**
-- Prompt template library
-- Categories (customer-service, code, analysis, etc.)
-- Quick clone
-
-**5. Team Collaboration**
-- Shared workspaces
-- Comments on prompts
-- Activity feed
+**3. Analytics**
+- Fitness scores over generations
+- Best solutions found
+- Convergence graphs
 
 ---
 
 ## 4. Acceptance Criteria
 
-- [ ] Dashboard displays metrics
-- [ ] Can create and edit prompts
-- [ ] Version history with diffs works
-- [ ] Tags and categories function
-- [ ] Search and filter work
-- [ ] Responsive design works
+- [ ] Can create experiments
+- [ ] Progress tracking works
+- [ ] Analytics display correctly
