@@ -1,8 +1,6 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
-import Prompts from './pages/Prompts'
-import Templates from './pages/Templates'
-import Team from './pages/Team'
+import ABTests from './pages/ABTests'
 
 function App() {
   return (
@@ -11,25 +9,19 @@ function App() {
         {/* Navbar */}
         <nav className="navbar">
           <div className="navbar-logo">
-            <div className="navbar-logo-icon">📝</div>
-            <span>PromptLab</span>
+            <div className="navbar-logo-icon">🔀</div>
+            <span>ABTestPro</span>
           </div>
           <div className="navbar-nav">
             <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
               Dashboard
             </NavLink>
-            <NavLink to="/prompts" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              Prompts
-            </NavLink>
-            <NavLink to="/templates" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              Templates
-            </NavLink>
-            <NavLink to="/team" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              Team
+            <NavLink to="/tests" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+              Tests
             </NavLink>
           </div>
           <div className="navbar-user">
-            <div className="user-avatar">P</div>
+            <div className="user-avatar">A</div>
           </div>
         </nav>
 
@@ -42,23 +34,9 @@ function App() {
                 <span className="sidebar-icon">📊</span>
                 Overview
               </NavLink>
-              <NavLink to="/prompts" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
-                <span className="sidebar-icon">📝</span>
-                Prompts
-              </NavLink>
-              <NavLink to="/templates" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
-                <span className="sidebar-icon">📋</span>
-                Templates
-              </NavLink>
-            </nav>
-          </div>
-          
-          <div className="sidebar-section">
-            <div className="sidebar-title">Collaboration</div>
-            <nav className="sidebar-nav">
-              <NavLink to="/team" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
-                <span className="sidebar-icon">👥</span>
-                Team
+              <NavLink to="/tests" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
+                <span className="sidebar-icon">🔀</span>
+                Tests
               </NavLink>
             </nav>
           </div>
@@ -66,9 +44,9 @@ function App() {
           <div className="sidebar-section">
             <div className="sidebar-title">Quick Actions</div>
             <nav className="sidebar-nav">
-              <button className="sidebar-link" style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }} onClick={() => window.location.href = '/prompts?new=true'}>
+              <button className="sidebar-link" style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }} onClick={() => window.location.href = '/tests?new=true'}>
                 <span className="sidebar-icon">➕</span>
-                New Prompt
+                New Test
               </button>
             </nav>
           </div>
@@ -78,9 +56,7 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/prompts" element={<Prompts />} />
-            <Route path="/templates" element={<Templates />} />
-            <Route path="/team" element={<Team />} />
+            <Route path="/tests" element={<ABTests />} />
           </Routes>
         </main>
       </div>
