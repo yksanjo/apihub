@@ -1,81 +1,99 @@
-# Document Intelligence API Gateway - Specification
+# PromptLab - Specification Document
 
-## Project Overview
-- **Project Name**: DocuExtract Gateway
-- **Type**: Node.js/Express API Gateway
-- **Core Functionality**: Unified API that abstracts multiple document extraction services (LangExtract, AWS Textract, Azure Document Intelligence) with intelligent routing and volume discounts
-- **Target Users**: Developers and enterprises needing document extraction with cost optimization
+## 1. Project Overview
 
-## Architecture
+**Project Name:** PromptLab  
+**Type:** SaaS Web Application  
+**Core Functionality:** A specialized platform for prompt engineering, version control, and collaborative prompt optimization. Features prompt templates, diff viewing, rollback, and team collaboration.  
+**Target Users:** Prompt engineers, AI developers, LLM application builders, and teams working on prompt optimization.
 
-### Core Components
-1. **API Gateway** - Express.js REST API exposing document extraction endpoints
-2. **Provider Adapters** - Abstract interfaces for each extraction service
-3. **Routing Engine** - Intelligent provider selection based on document type, cost, and speed
-4. **Pricing Engine** - Volume discount calculations
+---
 
-### Supported Providers
-1. **LangExtract** - Custom/local extraction service (cheapest for text-heavy docs)
-2. **AWS Textract** - Amazon's document extraction (fast for PDFs/images)
-3. **Azure Document Intelligence** - Microsoft's AI service (best for forms/layouts)
+## 2. UI/UX Specification
 
-## Functionality Specification
+### Layout Structure
 
-### 1. Unified API Endpoints
-- `POST /extract` - Extract text/structure from document
-- `GET /providers` - List available providers
-- `GET /pricing` - Get pricing tiers and discounts
-- `GET /health` - Health check endpoint
+**Page Sections:**
+- **Navigation Bar:** Fixed top, 64px height, logo + main nav + user menu
+- **Sidebar:** Collapsible left sidebar, 280px width
+- **Main Content Area:** Fluid width
+- **Footer:** Minimal, 48px
 
-### 2. Auto-Routing Logic
-| Document Type | Primary Provider | Fallback |
-|--------------|-------------------|----------|
-| invoice | Azure | AWS Textract |
-| receipt | AWS Textract | Azure |
-| form | Azure | AWS Textract |
-| contract | LangExtract | Azure |
-| id_document | AWS Textract | Azure |
-| generic | AWS Textract | LangExtract |
+**Responsive Breakpoints:**
+- Mobile: < 768px
+- Tablet: 768px - 1024px
+- Desktop: > 1024px
 
-### 3. Routing Criteria
-- **Cost Optimization**: Cheapest provider for document type
-- **Speed**: Provider response time consideration
-- **Accuracy**: Quality score per document type
-- **Fallback**: Automatic retry on failure
+### Visual Design
 
-### 4. Volume Discounts
-| Monthly Volume | Discount |
-|---------------|----------|
-| 0-1,000 pages | 0% |
-| 1,001-10,000 pages | 10% |
-| 10,001-50,000 pages | 20% |
-| 50,001-100,000 pages | 30% |
-| 100,000+ pages | 40% |
+**Color Palette:**
+- Background Primary: `#0D0D12`
+- Background Secondary: `#16161D`
+- Background Tertiary: `#1E1E28`
+- Accent Primary: `#00D9FF` (electric cyan)
+- Accent Secondary: `#FF6B35` (vibrant coral)
+- Accent Tertiary: `#A855F7` (purple glow)
+- Success: `#10B981`
+- Warning: `#F59E0B`
+- Error: `#EF4444`
+- Text Primary: `#F8FAFC`
+- Text Secondary: `#94A3B8`
+- Text Muted: `#64748B`
+- Border: `#2D2D3A`
 
-### 5. Provider Pricing (per page)
-- LangExtract: $0.001/page
-- AWS Textract: $0.015/page (AnalyzeDocument)
-- Azure Document Intelligence: $0.005/page (prebuilt-document)
+**Typography:**
+- Font Family Primary: `'JetBrains Mono', monospace`
+- Font Family Secondary: `'Outfit', sans-serif`
+- Font Family Body: `'DM Sans', sans-serif`
 
-## Data Flow
-1. Client sends document to `/extract` endpoint
-2. Gateway analyzes document type (via metadata or ML)
-3. Routing engine selects optimal provider
-4. Document sent to selected provider
-5. Response normalized and returned to client
-6. Usage tracked for billing
+### Components
 
-## Configuration
-All configuration via `config.yaml`:
-- Provider credentials
-- Pricing tiers
-- Routing rules
-- Fallback settings
+- Prompt cards with version badges
+- Diff viewer with syntax highlighting
+- Version timeline
+- Tag filters
+- Code editor with syntax highlighting
 
-## Acceptance Criteria
-1. Gateway accepts document uploads and returns extracted content
-2. Auto-routing selects appropriate provider based on document type
-3. Volume discounts applied correctly based on usage
-4. Fallback mechanism works when primary provider fails
-5. All endpoints return proper JSON responses
-6. Health check returns provider status
+---
+
+## 3. Functionality Specification
+
+### Core Features
+
+**1. Dashboard**
+- Prompt overview metrics
+- Recent prompts
+- Team activity
+
+**2. Prompt Management**
+- Create/edit/delete prompts
+- Rich text editor
+- Tags and categories
+- Search and filter
+
+**3. Version Control**
+- Full version history
+- Diff view between versions
+- Rollback capability
+- Version comparison
+
+**4. Templates**
+- Prompt template library
+- Categories (customer-service, code, analysis, etc.)
+- Quick clone
+
+**5. Team Collaboration**
+- Shared workspaces
+- Comments on prompts
+- Activity feed
+
+---
+
+## 4. Acceptance Criteria
+
+- [ ] Dashboard displays metrics
+- [ ] Can create and edit prompts
+- [ ] Version history with diffs works
+- [ ] Tags and categories function
+- [ ] Search and filter work
+- [ ] Responsive design works

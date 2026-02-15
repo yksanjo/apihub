@@ -5,9 +5,18 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/dashboard')
+    fetch('/api/prompts')
       .then(res => res.json())
-      .then(setData)
+      .then(prompts => {
+        setData({
+          metrics: {
+            totalPrompts: prompts.length,
+            versions: prompts.reduce((acc, p) => acc + (p.versions?.length || 1), 0),
+            avgVersion: prompts.length > 0 ? (prompts.reduce((acc, p) => acc + (p.version || 1), 0) / prompts.length).toFixed(1) : 0
+          },
+          recentPrompts: prompts.slice(0, 5)
+        })
+      })
       .catch(console.error)
       .finally(() => setLoading(false))
   }, [])
@@ -22,106 +31,80 @@ export default function Dashboard() {
     )
   }
 
-  const { metrics, recentExperiments, recentActivity } = data
+  const { metrics, recentPrompts } = data || { metrics: {}, recentPrompts: [] }
 
   return (
     <div className="page-container">
       <div className="flex items-center justify-between mb-lg">
         <div>
           <h1>Dashboard</h1>
-          <p className="text-secondary mt-sm">Overview of your optimization workspace</p>
+          <p className="text-secondary mt-sm">Your prompt engineering workspace</p>
         </div>
-        <button className="btn btn-primary">+ New Experiment</button>
+        <button className="btn btn-primary" onClick={() => window.location.href = '/prompts?new=true'}>+ New Prompt</button>
       </div>
 
       {/* Metrics Grid */}
       <div className="grid grid-4 mb-lg">
         <div className="metric-card">
-          <div className="metric-value">{metrics.activeExperiments}</div>
-          <div className="metric-label">Active Experiments</div>
-          <div className="metric-change positive">🟢 Running</div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-value">{metrics.completedExperiments}</div>
-          <div className="metric-label">Completed</div>
-          <div className="metric-change">{metrics.successRate}% success rate</div>
-        </div>
-        <div className="metric-card">
-          <div className="metric-value">{metrics.activeTests}</div>
-          <div className="metric-label">Active A/B Tests</div>
-          <div className="metric-change">{metrics.completedTests} completed</div>
-        </div>
-        <div className="metric-card">
           <div className="metric-value">{metrics.totalPrompts}</div>
-          <div className="metric-label">Prompt Templates</div>
-          <div className="metric-change">{metrics.teamMembers} team members</div>
+          <div className="metric-label">Total Prompts</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-value">{metrics.versions}</div>
+          <div className="metric-label">Total Versions</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-value">{metrics.avgVersion}</div>
+          <div className="metric-label">Avg. Version</div>
+        </div>
+        <div className="metric-card">
+          <div className="metric-value">1</div>
+          <div className="metric-label">Team Members</div>
         </div>
       </div>
 
       <div className="grid grid-2">
-        {/* Recent Experiments */}
+        {/* Recent Prompts */}
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">Recent Experiments</h3>
-            <a href="/experiments" className="btn btn-ghost btn-sm">View All</a>
+            <h3 className="card-title">Recent Prompts</h3>
+            <a href="/prompts" className="btn btn-ghost btn-sm">View All</a>
           </div>
           <div className="flex flex-col gap-md">
-            {recentExperiments.map(exp => (
-              <div key={exp.id} className="flex items-center justify-between" style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '6px' }}>
+            {recentPrompts.map(prompt => (
+              <div key={prompt.id} className="flex items-center justify-between" style={{ padding: '12px', background: 'var(--bg-tertiary)', borderRadius: '6px' }}>
                 <div>
-                  <div style={{ fontWeight: 500 }}>{exp.name}</div>
-                  <div className="text-muted" style={{ fontSize: '12px' }}>{exp.objective}</div>
+                  <div style={{ fontWeight: 500 }}>{prompt.name}</div>
+                  <div className="text-muted" style={{ fontSize: '12px', fontFamily: 'var(--font-mono)' }}>
+                    {prompt.content?.substring(0, 60)}...
+                  </div>
                 </div>
-                <div className="flex items-center gap-md">
-                  <span className={`badge ${exp.status === 'completed' ? 'badge-success' : exp.status === 'running' ? 'badge-info' : 'badge-warning'}`}>
-                    {exp.status}
-                  </span>
-                  {exp.status === 'running' && (
-                    <div style={{ width: '60px' }}>
-                      <div className="progress-bar">
-                        <div className="progress-fill" style={{ width: `${exp.progress}%` }}></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <span className="badge badge-info">v{prompt.version}</span>
               </div>
             ))}
+            {recentPrompts.length === 0 && (
+              <div className="text-muted" style={{ textAlign: 'center', padding: '20px' }}>
+                No prompts yet. Create your first prompt!
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Activity Feed */}
+        {/* Quick Actions */}
         <div className="card">
           <div className="card-header">
-            <h3 className="card-title">Recent Activity</h3>
+            <h3 className="card-title">Quick Actions</h3>
           </div>
-          <div className="flex flex-col">
-            {recentActivity.map(activity => (
-              <div key={activity.id} className="activity-item">
-                <div className="activity-icon">
-                  {activity.type === 'experiment' ? '🧬' : activity.type === 'prompt' ? '📝' : '🔀'}
-                </div>
-                <div className="activity-content">
-                  <div className="activity-text">
-                    <strong>{activity.action}</strong> {activity.target}
-                  </div>
-                  <div className="activity-time">
-                    {new Date(activity.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Stats Chart Placeholder */}
-      <div className="card mt-lg">
-        <div className="card-header">
-          <h3 className="card-title">Performance Trends</h3>
-        </div>
-        <div style={{ height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-tertiary)', borderRadius: '8px' }}>
-          <div className="text-muted">
-            📈 Chart visualization would appear here with experiment performance data
+          <div className="flex flex-col gap-md">
+            <button className="btn btn-secondary" style={{ justifyContent: 'flex-start' }} onClick={() => window.location.href = '/templates'}>
+              📋 Browse Templates
+            </button>
+            <button className="btn btn-secondary" style={{ justifyContent: 'flex-start' }} onClick={() => window.location.href = '/prompts?new=true'}>
+              ➕ Create New Prompt
+            </button>
+            <button className="btn btn-secondary" style={{ justifyContent: 'flex-start' }}>
+              📤 Import Prompts
+            </button>
           </div>
         </div>
       </div>
