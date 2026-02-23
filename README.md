@@ -1,5 +1,12 @@
 # apihub
 
+Production-grade project scaffold focused on reliability, maintainability, and fast onboarding.
+
+[![CI](https://img.shields.io/github/actions/workflow/status/yksanjo/apihub/ci.yml?branch=main&label=ci)](https://github.com/yksanjo/apihub/actions)
+![License](https://img.shields.io/github/license/yksanjo/apihub)
+![Last Commit](https://img.shields.io/github/last-commit/yksanjo/apihub)
+![Repo Size](https://img.shields.io/github/repo-size/yksanjo/apihub)
+
 ## Detailed Description
 
 apihub is maintained as an industry-grade software project with production-ready engineering practices.  
